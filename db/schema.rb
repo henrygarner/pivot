@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20091126233803) do
   create_table "date_dimensions", :force => true do |t|
     t.string   "day"
     t.string   "month"
+    t.string   "year"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

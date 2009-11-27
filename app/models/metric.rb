@@ -9,14 +9,22 @@ class Metric < ActiveRecord::Base
       hash 
     end  
   end 
-  
-  def cube(*args)
-     cube_dimensions = args.collect { |arg| dimensions_hash[arg] || raise("Unknown dimension: #{arg}") }.uniq
+         
+  def cube(args)     
+    
+    args = args.split(',') if args.is_a? String
+    args = args.inject({}) { |hash, arg| dimension, grain = arg.to_s.split('.'); hash[dimension] = grain; hash } if args.is_a? Array
+    cube_dimensions = args.collect do |(dimension_name, grain)| 
+       dimension = dimensions_hash[dimension_name] || raise("Unknown dimension: #{dimension_name}")
+       dimension.grain = grain if grain
+       dimension
+     end  
+     
      returning((dimensions - cube_dimensions).reject(&:additive?)) do |nonadditive|
        raise("Can't collapse non-additive dimensions: #{ nonadditive.map(&:name).join(', ') }") unless nonadditive.empty?
      end
-     # TODO: check for contradictory grain in non-additive dimensions
-
+     # TODO: check for contradictory grain in non-additive dimensions   
+     
      fields = cube_dimensions.map { |dimension| "#{dimension.class.table_name}.#{dimension.grain}" }
      group = fields.join ', '
      select = (fields << "SUM(facts.value) value").join ', '
@@ -35,8 +43,8 @@ class Metric < ActiveRecord::Base
     
     hash = {}
     rows.each { |row| hash[row] = row.pop }
-   
- 	Cube.new :data => hash, :dimensions => cube_dimensions
-  end
+ 	  Cube.new :data => hash, :dimensions => cube_dimensions
+  end 
+  
   
 end

@@ -9,7 +9,10 @@ module MetricsHelper
 			total = 0
 			dimension = cube.dimensions[depth]
 			grain = dimension.grain
-			keys = dimension.class.all.collect { |dimension| dimension.send grain }.uniq
+			keys = dimension.class.scoped(:select => "DISTINCT #{grain}") do
+			   dimension.class.all
+		  end.collect(&grain.to_sym)
+			#keys = dimension.class.all.collect { |dimension| dimension.send grain }.uniq
 			html = keys.collect do |key|
 				count, html = render_table_section cube, cells[key], depth+1
 				total = total + count
