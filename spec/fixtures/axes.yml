@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  fact_id: 1
+  dimension_id: 1
+  dimension_type: MyString
+
+two:
+  fact_id: 1
+  dimension_id: 1
+  dimension_type: MyString

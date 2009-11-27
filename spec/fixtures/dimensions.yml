@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  metric_id: 1
+  type: MyString
+  additive: false
+
+two:
+  metric_id: 1
+  type: MyString
+  additive: false

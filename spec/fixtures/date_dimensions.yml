@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  day: MyString
+  month: MyString
+
+two:
+  day: MyString
+  month: MyString
